@@ -8,7 +8,7 @@ import {
     Container,
 } from "@mui/material";
 import { useStore } from "../store";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Result from "./Result";
 
 const questions = [
@@ -111,7 +111,9 @@ const Quiz = () => {
     }, [state.showAnswer])
 
     const currentIndex = state.currentIndex;
-    const currentQuestion = questions[currentIndex];
+    const currentQuestion = useMemo(() => {
+        return questions[state.currentIndex];
+    }, [state.currentIndex]);
 
     const getOptionStyle = (option: string) => {
         const correct = currentQuestion.answer;
