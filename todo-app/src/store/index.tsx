@@ -1,4 +1,8 @@
-export {default as  StoreProvider} from './Provider'
-export {default as  StoreContext} from './Context'
-export * from './hooks'
+import { configureStore } from "@reduxjs/toolkit";
+import quizReducer from "./slice/QuizSlice";
 
+export const store = configureStore({
+    reducer: {
+        quiz: quizReducer,
+    },
+});

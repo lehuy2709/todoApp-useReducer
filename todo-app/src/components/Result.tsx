@@ -1,9 +1,12 @@
 import { Button, Container, Typography } from "@mui/material";
-import { useStore } from "../store";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { useSelector, useDispatch } from "react-redux";
+import { restart } from "../store/slice/QuizSlice";
 
 const Result = () => {
-    const { state, dispatch } = useStore();
+    // @ts-ignore
+    const state = useSelector((state) => state.quiz);
+    const dispatch = useDispatch();
 
     return (
         <Container maxWidth="sm" sx={{ mt: 10, textAlign: "center" }}>
@@ -19,7 +22,7 @@ const Result = () => {
                 variant="contained"
                 color="primary"
                 sx={{ mt: 4 }}
-                onClick={() => dispatch({ type: "resestQuestions" })}
+                onClick={() => dispatch(restart())}
             >
                 Làm lại bài
             </Button>

@@ -7,9 +7,11 @@ import {
     Stack,
     Container,
 } from "@mui/material";
-import { useStore } from "../store";
 import { useEffect, useMemo } from "react";
 import Result from "./Result";
+import { useSelector, useDispatch } from "react-redux";
+import { selectAnswer, nextQuestion } from "../store/slice/QuizSlice";
+
 
 const questions = [
     {
@@ -95,20 +97,18 @@ const Quiz = () => {
 
 
     // @ts-ignore
-    const { state, dispatch } = useStore()
+    const state = useSelector((state) => state.quiz);     
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
         if (state.showAnswer) {
             const timer = setTimeout(() => {
-                dispatch({
-                    type: "nextQuestion",
-                    totalQuestion: questions.length,
-                });
+                dispatch(nextQuestion(questions.length));
             }, 400);
-
             return () => clearTimeout(timer);
         }
-    }, [state.showAnswer])
+    }, [state.showAnswer, dispatch, state.currentIndex]);
 
     const currentIndex = state.currentIndex;
     const currentQuestion = useMemo(() => {
@@ -165,12 +165,10 @@ const Quiz = () => {
                                 }}
                                 onClick={() => {
                                     if (!state.showAnswer) {
-                                        dispatch({
-                                            type: "selectAnswer", payload: {
-                                                selected: option,
-                                                correct: currentQuestion.answer,
-                                            },
-                                        });
+                                        dispatch(selectAnswer({
+                                            selected: option,
+                                            correct: currentQuestion.answer,
+                                        }));
                                     }
                                 }}
                             >
@@ -184,7 +182,7 @@ const Quiz = () => {
                             variant="contained"
                             color="primary"
                             onClick={() =>
-                                dispatch({ type: "nextQuestion", totalQuestion: questions.length })
+                                dispatch(nextQuestion(questions.length))
                             }
                         >
                             Câu tiếp theo
